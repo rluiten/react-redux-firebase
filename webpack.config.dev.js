@@ -1,10 +1,56 @@
-import path from 'path';
-import webpack from 'webpack';
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
 
-export default {
+// import path from 'path';
+// import webpack from 'webpack';
+
+// 'webpack-hot-middleware/client',
+
+// plugins: [
+// 	new webpack.HotModuleReplacementPlugin(),
+// 	new webpack.NoErrorsPlugin(),
+// 	new webpack.DefinePlugin({
+// 		'process.env': {
+// 			NODE_ENV: JSON.stringify('development')
+// 		}
+// 	}),
+// ],
+
+//-- Environment.
+const NODE_ENV = process.env.NODE_ENV;
+
+const ENV_DEVELOPMENT = NODE_ENV === 'development';
+const ENV_PRODUCTION = NODE_ENV === 'production';
+const ENV_TEST = NODE_ENV === 'test';
+
+const HOST = process.env.HOST || 'localhost';
+const PORT = process.env.PORT || 3000;
+
+console.log('webpack.config.dev.js [process.env.NODE_ENV]', process.env.NODE_ENV);
+
+const config = {};
+module.exports = config;
+
+if (ENV_DEVELOPMENT) {
+	Object.assign(config, {
+		devServer: {
+			// same path as build convenient have only one index.html setup then.
+			contentBase: 'static/',
+		},
+	});
+}
+
+// if (ENV_DEVELOPMENT || ENV_PRODUCTION) {
+//
+// }
+
+// export default {
+Object.assign(config, {
 	devtool: 'cheap-module-eval-source-map',
+
 	entry: [
-		'webpack-hot-middleware/client',
 		'./src/index'
 	],
 	output: {
@@ -13,13 +59,9 @@ export default {
 		publicPath: '/'
 	},
 	plugins: [
-		new webpack.HotModuleReplacementPlugin(),
-		new webpack.NoErrorsPlugin(),
 		new webpack.DefinePlugin({
-			'process.env': {
-				NODE_ENV: JSON.stringify('development')
-			}
-		}),
+			'process.env.NODE_ENV': JSON.stringify(NODE_ENV)
+		})
 	],
 	resolve: {
 		extensions: ['', '.js', '.jsx']
@@ -39,4 +81,4 @@ export default {
 			include: path.join(__dirname, 'src')
 		}]
 	}
-};
+});

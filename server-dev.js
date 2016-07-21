@@ -6,15 +6,15 @@ import config from './webpack.config.dev';
 const app = express();
 const compiler = webpack(config);
 
-app.use(require('webpack-dev-middleware')(compiler, {
-	stats: {
-		chunks: false,
-		colors: true
-	},
-	publicPath: config.output.publicPath
-}));
+// app.use(require('webpack-dev-middleware')(compiler, {
+// 	stats: {
+// 		chunks: false,
+// 		colors: true
+// 	},
+// 	publicPath: config.output.publicPath
+// }));
 
-app.use(require('webpack-hot-middleware')(compiler));
+// app.use(require('webpack-hot-middleware')(compiler));
 
 app.use(express.static('static'));
 

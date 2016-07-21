@@ -1,6 +1,8 @@
 import path from 'path';
 import webpack from 'webpack';
 
+console.log('webpack.config.dev.js [process.env.NODE_ENV]', process.env.NODE_ENV);
+
 export default {
 	devtool: 'source-map',
 	entry: [

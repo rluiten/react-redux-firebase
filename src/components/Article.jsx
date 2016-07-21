@@ -22,6 +22,7 @@ class Article extends Component {
 				</form>
 			);
 		}
+
 		if (!this.props.canEdit) {
 			button = '';
 		} else if (this.props.status === C.ARTICLE_SUBMITTING) {
@@ -37,7 +38,7 @@ class Article extends Component {
 		return (
 			<div>
 				<span>{`${this.props.article.username} said:`}</span>
-				{this.props.article.content} { button }
+				{this.props.article.content} {button}
 			</div>
 		);
 	}

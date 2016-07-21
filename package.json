@@ -9,7 +9,6 @@
     "prebuild": "npm-run-all clean",
     "build": "cross-env NODE_ENV=production webpack --progress --display-chunks",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --progress",
-    "dev:w": "npm run dev -- -w"
   },
   "devDependencies": {
     "babel-core": "^6.11.4",

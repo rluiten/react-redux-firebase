@@ -4,32 +4,23 @@ const path = require('path');
 const webpack = require('webpack');
 const WebpackMd5Hash = require('webpack-md5-hash');
 
-// import path from 'path';
-// import webpack from 'webpack';
-
-// 'webpack-hot-middleware/client',
-
-// plugins: [
-// 	new webpack.HotModuleReplacementPlugin(),
-// 	new webpack.NoErrorsPlugin(),
-// 	new webpack.DefinePlugin({
-// 		'process.env': {
-// 			NODE_ENV: JSON.stringify('development')
-// 		}
-// 	}),
-// ],
-
 // Environment.
 const NODE_ENV = process.env.NODE_ENV;
-
 const ENV_DEVELOPMENT = NODE_ENV === 'development';
 const ENV_PRODUCTION = NODE_ENV === 'production';
 const ENV_TEST = NODE_ENV === 'test';
-
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 8080;
 
 console.log('webpack environment', process.env.NODE_ENV);
+
+const preLoaders = {
+	js: {
+		test: /\.js|\.jsx$/,
+		loaders: ['eslint-loader'],
+		exclude: ['node_modules']
+	}
+};
 
 const loaders = {
 	js: {
@@ -38,14 +29,6 @@ const loaders = {
 		include: path.join(__dirname, 'src')
 	}
 	// scss: {test: /\.scss$/, loader: 'style!css!postcss!sass'}
-};
-
-const preLoaders = {
-	js: {
-		test: /\.js|\.jsx$/,
-		loaders: ['eslint-loader'],
-		exclude: ['node_modules']
-	}
 };
 
 // Config
@@ -63,7 +46,6 @@ config.plugins = [
 		'process.env.NODE_ENV': JSON.stringify(NODE_ENV)
 	})
 ];
-
 
 if (ENV_DEVELOPMENT || ENV_PRODUCTION) {
 	config.entry = {
@@ -94,7 +76,6 @@ if (ENV_DEVELOPMENT || ENV_PRODUCTION) {
 	config.eslint = {
 		configFile: '.eslintrc'
 	};
-
 }
 
 if (ENV_DEVELOPMENT) {
@@ -102,10 +83,34 @@ if (ENV_DEVELOPMENT) {
 
 	config.entry.main.unshift(
 		`webpack-dev-server/client?http://${HOST}:${PORT}`,
-		// 'webpack/hot/only-dev-server',
-		// 'react-hot-loader/patch',
+		'webpack/hot/only-dev-server',
+		'react-hot-loader/patch',
 		'babel-polyfill'
 	);
+
+	config.plugins.push(
+		new webpack.HotModuleReplacementPlugin()
+	);
+
+	config.devServer = {
+		contentBase: './src',
+		// historyApiFallback: true,
+		host: HOST,
+		hot: true,
+		port: PORT,
+		publicPath: config.output.publicPath,
+		stats: {
+			cached: true,
+			cachedAssets: true,
+			chunks: true,
+			chunkModules: false,
+			colors: true,
+			hash: false,
+			reasons: true,
+			timings: true,
+			version: false
+		}
+	};
 }
 
 if (ENV_PRODUCTION) {

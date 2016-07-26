@@ -9,5 +9,10 @@
     "react/jsx-indent": [2, "tab"],
     "react/jsx-no-bind": 1,
     "react/jsx-indent-props": [1, "tab"]
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    }
   }
 }

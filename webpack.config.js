@@ -16,7 +16,7 @@ console.log('webpack environment', process.env.NODE_ENV);
 
 const preLoaders = {
 	js: {
-		test: /\.js|\.jsx$/,
+		test: /\.jsx?$/,
 		loaders: ['eslint-loader'],
 		exclude: ['node_modules']
 	}
@@ -24,7 +24,7 @@ const preLoaders = {
 
 const loaders = {
 	js: {
-		test: /\.js|\.jsx$/,
+		test: /\.jsx?$/,
 		loaders: ['babel'],
 		include: path.join(__dirname, 'src')
 	}

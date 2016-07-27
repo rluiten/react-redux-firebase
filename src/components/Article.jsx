@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import C from '../constants';
 
 class Article extends Component {
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		this.submit = this.submit.bind(this);
 		this.startEdit = this.startEdit.bind(this);
 		this.cancelEdit = this.cancelEdit.bind(this);
 		this.deleteArticle = this.deleteArticle.bind(this);
+		this.renderArticle = this.renderArticle.bind(this);
 	}
 	submit(e) {
 		e.preventDefault();
@@ -26,8 +27,15 @@ class Article extends Component {
 		e.preventDefault();
 		this.props.deleteArticle(this.props.qid);
 	}
+	renderArticle(button) {
+		return (
+			<div>
+				<span>{`${this.props.article.username} said:`}</span>
+				{this.props.article.content} {button}
+			</div>
+		);
+	}
 	render() {
-		let button;
 		if (this.props.status === C.ARTICLE_EDITING) {
 			return (
 				<form onSubmit={this.submit}>
@@ -37,24 +45,17 @@ class Article extends Component {
 				</form>
 			);
 		}
-
 		if (!this.props.canEdit) {
-			button = '';
-		} else if (this.props.status === C.ARTICLE_SUBMITTING) {
-			button = <button disabled="disabled">Submitting...</button>;
-		} else {
-			button = (
-				<span>
-					<button onClick={this.startEdit}>Edit</button>
-					<button onClick={this.deleteArticle}>Delete</button>
-				</span>
-			);
+			return this.renderArticle('');
 		}
-		return (
-			<div>
-				<span>{`${this.props.article.username} said:`}</span>
-				{this.props.article.content} {button}
-			</div>
+		if (this.props.status === C.ARTICLE_SUBMITTING) {
+			return this.renderArticle(<button disabled="disabled">Submitting...</button>);
+		}
+		return this.renderArticle(
+			<span>
+				<button onClick={this.startEdit}>Edit</button>
+				<button onClick={this.deleteArticle}>Delete</button>
+			</span>
 		);
 	}
 }

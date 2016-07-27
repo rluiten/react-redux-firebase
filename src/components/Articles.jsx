@@ -13,63 +13,75 @@ class Articles extends Component {
 	constructor(props) {
 		super(props);
 		this.submitNewArticle = this.submitNewArticle.bind(this);
+		this.renderInput = this.renderInput.bind(this);
+		this.renderInterface = this.renderInterface.bind(this);
+		this.renderArticle = this.renderArticle.bind(this);
 	}
 	submitNewArticle(e) {
+		e.preventDefault();
 		if (!this.props.articles.submitting) {
-			e.preventDefault();
-			if (this.refs.newArticle.value) {
-				this.props.submitArticle(this.refs.newArticle.value);
+			const newArticle = this.refs.newArticle;
+			if (newArticle.value) {
+				this.props.submitArticle(newArticle.value);
 			}
-			this.refs.newArticle.value = '';
+			newArticle.value = '';
 		}
 	}
-	render() {
-		let rows = [];
-		const { articles, ...restProps } = this.props;
-		if (articles.data) {
-			rows = Object.keys(articles.data).map((qid) => {
-				const article = articles.data[qid];
-				const status = articles.status[qid];
-				return (
-					<Article
-						key={qid}
-						qid={qid}
-						article={article}
-						status={status}
-						canEdit={this.props.auth.uid === article.uid}
-						{...restProps}
-					/>
-				);
-			});
+	renderInput(articles) {
+		if (this.props.auth.uid) {
+			return (
+				<div>
+					<form onSubmit={this.submitNewArticle}>
+						<input ref="newArticle" placeholder="write something clever!" />
+						<button type="submit" disabled={articles.submittingNew}>
+							{articles.submittingNew ? 'Submitting...' : 'Submit'}
+						</button>
+					</form>
+				</div>
+			);
 		}
-		const content = this.props.auth.uid
-			? <div>
-				<form onSubmit={this.submitNewArticle}>
-					<input ref="newArticle" placeholder="write something clever!" />
-					<button type="submit" disabled={this.props.articles.submittingNew}>
-						{this.props.articles.submittingNew ? 'Submitting...' : 'Submit'}
-					</button>
-				</form>
-			</div>
-			: <p>Log in to add a new article of your own!</p>;
-		/* this.props.articles.hasReceivedData ? rows : 'Loading articles...' */
-		const rowsOrLoading = this.props.articles.hasReceivedData
-			? rows
-			: 'Loading articles...';
+		return <p>Log in to add a new article of your own!</p>;
+	}
+	renderInterface(articles, rows) {
 		return (
 			<div>
-				{content}
-				{this.props.articles.errorMessage
-					? <p>{this.props.articles.errorMessage}</p>
-					: rowsOrLoading
+				{this.renderInput(articles)}
+				{articles.errorMessage
+					? <p>{articles.errorMessage}</p>
+					: rows
 				}
 			</div>
 		);
+	}
+	renderArticle(qid) {
+		const { articles, auth: { uid }, ...handlers } = this.props;
+		return (
+			<Article
+				key={qid}
+				qid={qid}
+				article={articles.data[qid]}
+				status={articles.status[qid]}
+				canEdit={uid === articles.data[qid].uid}
+				{...handlers}
+			/>
+		);
+	}
+	render() {
+		const articles = this.props.articles;
+		if (articles.hasReceivedData) {
+			const keys = Object.keys(articles.data || {});
+			const rows = (keys.length === 0)
+				? 'There are no articles to display...'
+				: keys.map(this.renderArticle);
+			return this.renderInterface(articles, rows);
+		}
+		return this.renderInterface(articles, 'Loading articles...');
 	}
 }
 
 Articles.propTypes = {
 	articles: React.PropTypes.object.isRequired,
+	auth: React.PropTypes.object.isRequired,
 	startArticleEdit: React.PropTypes.func.isRequired,
 	cancelArticleEdit: React.PropTypes.func.isRequired,
 	submitArticleEdit: React.PropTypes.func.isRequired,

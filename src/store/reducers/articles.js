@@ -8,10 +8,11 @@ const initialState = {
 	status: {},
 };
 
-export default (state, action) => {
+export default (state = initialState, action) => {
 	let newstate;
 	switch (action.type) {
 		case C.ARTICLES_RECEIVE_DATA:
+			// Empty received data represented as empty object.
 			return Object.assign({}, state, {
 				hasReceivedData: true,
 				data: action.data,
@@ -42,6 +43,7 @@ export default (state, action) => {
 			newstate = Object.assign({}, state);
 			newstate.status[action.qid] = C.ARTICLE_SUBMITTING;
 			return newstate;
-		default: return state || initialState;
+		default:
+			return state;
 	}
 };

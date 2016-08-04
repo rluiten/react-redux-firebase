@@ -6,7 +6,7 @@ const initialState = {
 	status: C.AUTH_ANONYMOUS,
 };
 
-export default (state, action) => {
+export default (state = initialState, action) => {
 	switch (action.type) {
 		case C.AUTH_OPEN:
 			return {
@@ -26,6 +26,7 @@ export default (state, action) => {
 				username: 'guest',
 				uid: null
 			};
-		default: return state || initialState;
+		default:
+			return state;
 	}
 };

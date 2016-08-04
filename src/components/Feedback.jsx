@@ -5,7 +5,10 @@ import { dismissFeedback } from '../actions/feedback';
 class Feedback extends Component {
 	constructor(props) {
 		super(props);
-		this.dismissFeedback = this.props.dismissFeedback.bind(this);
+		this.dismissFeedback = this.dismissFeedback.bind(this);
+	}
+	dismissFeedback(n) {
+		this.props.dismissFeedback(n);
 	}
 	render() {
 		const rows = this.props.feedback.map((f, n) => {

@@ -5,11 +5,26 @@ class Article extends Component {
 	constructor() {
 		super();
 		this.submit = this.submit.bind(this);
+		this.startEdit = this.startEdit.bind(this);
+		this.cancelEdit = this.cancelEdit.bind(this);
+		this.deleteArticle = this.deleteArticle.bind(this);
 	}
 	submit(e) {
 		e.preventDefault();
-		this.props.submitArticleEdit(this.refs.article.value);
+		this.props.submitArticleEdit(this.props.qid, this.refs.article.value);
 		this.refs.article.value = '';
+	}
+	startEdit(e) {
+		e.preventDefault();
+		this.props.startArticleEdit(this.props.qid);
+	}
+	cancelEdit(e) {
+		e.preventDefault();
+		this.props.cancelArticleEdit(this.props.qid);
+	}
+	deleteArticle(e) {
+		e.preventDefault();
+		this.props.deleteArticle(this.props.qid);
 	}
 	render() {
 		let button;
@@ -17,7 +32,7 @@ class Article extends Component {
 			return (
 				<form onSubmit={this.submit}>
 					<input ref="article" defaultValue={this.props.article.content} />
-					<button type="button" onClick={this.props.cancelArticleEdit}>Cancel</button>
+					<button type="button" onClick={this.cancelEdit}>Cancel</button>
 					<button type="submit" onClick={this.submit}>Submit</button>
 				</form>
 			);
@@ -29,8 +44,8 @@ class Article extends Component {
 		} else {
 			button = (
 				<span>
-					<button onClick={this.props.startArticleEdit}>Edit</button>
-					<button onClick={this.props.deleteArticle}>Delete</button>
+					<button onClick={this.startEdit}>Edit</button>
+					<button onClick={this.deleteArticle}>Delete</button>
 				</span>
 			);
 		}
@@ -42,5 +57,17 @@ class Article extends Component {
 		);
 	}
 }
+
+Article.propTypes = {
+	// key: React.PropTypes.string.isRequired,
+	qid: React.PropTypes.string.isRequired,
+	article: React.PropTypes.object.isRequired,
+	status: React.PropTypes.string,
+	canEdit: React.PropTypes.bool.isRequired,
+	startArticleEdit: React.PropTypes.func.isRequired,
+	cancelArticleEdit: React.PropTypes.func.isRequired,
+	submitArticleEdit: React.PropTypes.func.isRequired,
+	deleteArticle: React.PropTypes.func.isRequired,
+};
 
 export default Article;

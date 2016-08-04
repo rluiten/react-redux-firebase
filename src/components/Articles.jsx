@@ -10,8 +10,8 @@ import {
 import Article from './Article';
 
 class Articles extends Component {
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		this.submitNewArticle = this.submitNewArticle.bind(this);
 	}
 	submitNewArticle(e) {
@@ -25,16 +25,11 @@ class Articles extends Component {
 	}
 	render() {
 		let rows = [];
-		if (this.props.articles.data) {
-			rows = Object.keys(this.props.articles.data).map((qid) => {
-				const article = this.props.articles.data[qid];
-				const status = this.props.articles.status[qid];
-				/* eslint-disable react/jsx-no-bind */
-				const thisStartArticleEdit = this.props.startArticleEdit.bind(this, qid);
-				const thisCancelArticleEdit = this.props.cancelArticleEdit.bind(this, qid);
-				const thisSubmitArticleEdit = this.props.submitArticleEdit.bind(this, qid);
-				const thisDeleteArticle = this.props.deleteArticle.bind(this, qid);
-				/* eslint-enable react/jsx-no-bind */
+		const { articles, ...restProps } = this.props;
+		if (articles.data) {
+			rows = Object.keys(articles.data).map((qid) => {
+				const article = articles.data[qid];
+				const status = articles.status[qid];
 				return (
 					<Article
 						key={qid}
@@ -42,29 +37,21 @@ class Articles extends Component {
 						article={article}
 						status={status}
 						canEdit={this.props.auth.uid === article.uid}
-						startArticleEdit={thisStartArticleEdit}
-						cancelArticleEdit={thisCancelArticleEdit}
-						submitArticleEdit={thisSubmitArticleEdit}
-						deleteArticle={thisDeleteArticle}
+						{...restProps}
 					/>
 				);
 			});
 		}
-		let content;
-		if (this.props.auth.uid) {
-			content = (
-				<div>
-					<form onSubmit={this.submitNewArticle}>
-						<input ref="newArticle" placeholder="write something clever!" />
-						<button type="submit" disabled={this.props.articles.submittingNew}>
-							{this.props.articles.submittingNew ? 'Submitting...' : 'Submit'}
-						</button>
-					</form>
-				</div>
-			);
-		} else {
-			content = <p>Log in to add a new article of your own!</p>;
-		}
+		const content = this.props.auth.uid
+			? <div>
+				<form onSubmit={this.submitNewArticle}>
+					<input ref="newArticle" placeholder="write something clever!" />
+					<button type="submit" disabled={this.props.articles.submittingNew}>
+						{this.props.articles.submittingNew ? 'Submitting...' : 'Submit'}
+					</button>
+				</form>
+			</div>
+			: <p>Log in to add a new article of your own!</p>;
 		/* this.props.articles.hasReceivedData ? rows : 'Loading articles...' */
 		const rowsOrLoading = this.props.articles.hasReceivedData
 			? rows
@@ -80,6 +67,14 @@ class Articles extends Component {
 		);
 	}
 }
+
+Articles.propTypes = {
+	articles: React.PropTypes.object.isRequired,
+	startArticleEdit: React.PropTypes.func.isRequired,
+	cancelArticleEdit: React.PropTypes.func.isRequired,
+	submitArticleEdit: React.PropTypes.func.isRequired,
+	deleteArticle: React.PropTypes.func.isRequired,
+};
 
 const mapStateToProps = (state) => {
 	return {

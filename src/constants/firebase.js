@@ -1,8 +1,8 @@
 export default {
 	firebaseConfig: {
-		apiKey: 'AIzaSyDbIlMLmJ00N_0dVQGAGXIxGRUWsaGiKC8',
-		authDomain: 'test1-1681f.firebaseapp.com',
-		databaseURL: 'https://test1-1681f.firebaseio.com',
-		storageBucket: 'test1-1681f.appspot.com'
+		apiKey: 'put your own api key here',
+		authDomain: 'put your own auth domain here',
+		databaseURL: 'https:// put your own database url here',
+		storageBucket: 'put your own storage bucket here'
 	}
 };

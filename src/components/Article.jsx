@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import C from '../constants';
 
 class Article extends Component {
-	constructor(props) {
-		super(props);
+	constructor() {
+		super();
 		this.submit = this.submit.bind(this);
 		this.startEdit = this.startEdit.bind(this);
 		this.cancelEdit = this.cancelEdit.bind(this);

@@ -1,0 +1,15 @@
+export default {
+	firebaseConfig: {
+<<<<<<< HEAD
+		apiKey: 'AIzaSyCHvJ-2m_Cn_JqUxXmwqvqy9b-6FbsYtEI',
+		authDomain: 'brilliant-inferno-6675.firebaseapp.com',
+		databaseURL: 'https://brilliant-inferno-6675.firebaseio.com',
+		storageBucket: 'brilliant-inferno-6675.appspot.com',
+=======
+		apiKey: 'put your own api key here',
+		authDomain: 'put your own auth domain here',
+		databaseURL: 'https:// put your own database url here',
+		storageBucket: 'put your own storage bucket here'
+>>>>>>> fix(firebase): reset config, old config deactivated
+	}
+};
